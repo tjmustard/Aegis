@@ -1,0 +1,55 @@
+# ============================================================
+# Personal Career Data
+# ============================================================
+
+# Career database and master resume (personal content — populate with your own)
+aegis/master_career_db.yaml
+aegis/master_resume.md
+
+# Resume and document files
+*.pdf
+*.docx
+
+# Profile photo used in resume templates
+aegis/templates/profile.png
+
+# ============================================================
+# Personal Job Applications & Generated Outputs
+# ============================================================
+
+# Active applications (each subfolder = one submitted application)
+Applications/
+
+# Job description inbox
+Job_Descriptions/
+
+# Generated cover letters and tailored resumes
+Cover_Letters/
+Tailored_Resumes/
+
+# ============================================================
+# Personal Example Files
+# ============================================================
+# Real cover letters and resumes are ignored via *.pdf / *.docx above.
+# READMEs in these folders explain what belongs here.
+
+# Personal job description examples — ignore real files,
+# keep EXAMPLE-prefixed templates so the format is visible.
+aegis/examples/job_descriptions/*.md
+!aegis/examples/job_descriptions/EXAMPLE - *.md
+
+# ============================================================
+# Root-Level Personal Job Description Files
+# ============================================================
+# Job descriptions should live in Job_Descriptions/; these are strays.
+
+# ============================================================
+# Archived / Deprecated Content
+# ============================================================
+DEPRECIATED/
+
+# ============================================================
+# Local Configuration
+# ============================================================
+# Machine-specific permission settings (paths are local; not portable)
+.claude/settings.local.json
