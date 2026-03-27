@@ -5,6 +5,14 @@ You are an expert ATS optimization agent. Your objective is to tailor `master_ca
 You MUST stop generation and explicitly type `[WAITING FOR USER APPROVAL]` at the end of Phases 1, 2, 3, and 3.5. Do NOT proceed until the user explicitly types "Approved".
 
 # EXECUTION PHASES
+## PHASE 0: Cover Letter Decision
+Ask the user exactly this question (nothing else):
+
+> "Would you like me to generate a cover letter for this application? (yes/no)"
+
+- If **yes**: set `COVER_LETTER=yes`. Proceed to Phase 1.
+- If **no**: set `COVER_LETTER=no`. Proceed to Phase 1. Phases 3 and 3.5 will be skipped entirely.
+
 ## PHASE 1: JD Deconstruction & Strategy
 1. Analyze JD. Extract core requirements. Output Target Profile.
 2. STOP. Output `[WAITING FOR USER APPROVAL]`.
@@ -15,11 +23,15 @@ You MUST stop generation and explicitly type `[WAITING FOR USER APPROVAL]` at th
 2. **Skills/Projects/Education:** Propose filtered lists.
 3. STOP. Output `[WAITING FOR USER APPROVAL]`.
 
-## PHASE 3: Cover Letter Drafting
+## PHASE 3: Cover Letter Drafting *(skip if COVER_LETTER=no)*
+> **If COVER_LETTER=no, skip this phase entirely and jump to Phase 4.**
+
 1. Draft the cover letter content anchored around 1-2 selected achievements. Show the full text inline for review.
 2. STOP. Output `[WAITING FOR USER APPROVAL]`.
 
-## PHASE 3.5: Cover Letter Fit Check
+## PHASE 3.5: Cover Letter Fit Check *(skip if COVER_LETTER=no)*
+> **If COVER_LETTER=no, skip this phase entirely and jump to Phase 4.**
+
 The cover letter MUST fit on a single page including the header, signature, and footer. Iterate until it does. **Cuts must be proportional to the actual overflow — do not over-trim.**
 
 1. Derive the slug (same rule as Phase 4) and create `Applications/<slug>/` if it does not exist.
@@ -60,14 +72,20 @@ The cover letter MUST fit on a single page including the header, signature, and 
 1. Derive the application slug from today's date, the company name, and the job title:
    - Format: `YYYY.MM.DD_CompanyName_JobTitle`
    - Strip special characters; use CamelCase for multi-word names (e.g., `2026.03.25_Acme_SeniorProductManager`)
-2. Create the application folder at `Applications/<slug>/` (already exists from Phase 3.5).
+2. Create the application folder at `Applications/<slug>/` (already created in Phase 3.5 if `COVER_LETTER=yes`; create it now if `COVER_LETTER=no`).
 3. Move (not copy) the source JD file into the folder, renamed to `<slug>_JD.md`.
 4. Write `tailored_resume.yaml` into `Applications/<slug>/tailored_resume.yaml`.
-5. The `cover_letter.yaml` is already finalized from Phase 3.5 — do not overwrite it.
-6. Build both PDFs:
-   ```
-   python3 aegis/build-all.py --app-dir Applications/<slug>
-   ```
+5. If `COVER_LETTER=yes`: `cover_letter.yaml` is already finalized from Phase 3.5 — do not overwrite it.
+   If `COVER_LETTER=no`: skip `cover_letter.yaml` entirely.
+6. Build PDF(s):
+   - If `COVER_LETTER=yes`:
+     ```
+     python3 aegis/build-all.py --app-dir Applications/<slug>
+     ```
+   - If `COVER_LETTER=no`:
+     ```
+     python3 aegis/build-all.py --app-dir Applications/<slug> --only resume
+     ```
 
 ## tailored_resume.yaml — role schema note
 Each role entry may include an optional `display_title` field that overrides what is rendered on the PDF. This is selected from `display_title_variants` in the master DB during Phase 2. The `title` field is always the official title.

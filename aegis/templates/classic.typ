@@ -31,9 +31,10 @@
 #for job in data.professional_experience {
   let primary_role = job.roles.first()
   let oldest_role = job.roles.last()
+  let shown_title = if "display_title" in primary_role { primary_role.display_title } else { primary_role.title }
   grid(
     columns: (1fr, auto),
-    [#strong[#primary_role.title] | #emph[#job.company]],
+    [#strong[#shown_title] | #emph[#job.company]],
     [#oldest_role.start_date -- #primary_role.end_date]
   )
   v(2pt)
@@ -66,6 +67,19 @@
     [#text(size: 10pt, style: "italic")[#edu.notes] \ ]
   }
   v(3pt)
+}
+
+// ── Patents / Inventions ──────────────────────────────────────────────────────
+#if "patents" in data and data.patents.len() > 0 {
+  v(4pt)
+  line(length: 100%, stroke: 0.5pt)
+  text(size: 12pt, weight: "bold")[Patents / Inventions]
+  v(5pt)
+
+  for pat in data.patents {
+    [#text(size: 9pt)[#pat.title. #pat.status.] \ ]
+    v(3pt)
+  }
 }
 
 // ── Selected Publications ─────────────────────────────────────────────────────

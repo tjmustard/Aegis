@@ -7,8 +7,8 @@ A Claude Code-based toolkit for tailoring resumes and cover letters to job descr
 Aegis uses Claude Code slash commands to drive an AI-assisted application workflow:
 
 1. **Ingest** your master resume into a structured YAML career database (`/aegis-ingest`)
-2. **Tailor** the career database to a specific job description — interactively selecting the most relevant roles, bullets, and skills (`/aegis-tailor`)
-3. **Generate** compiled PDF resume and cover letter from the tailored YAMLs (`/aegis-generate`)
+2. **Tailor** the career database to a specific job description — interactively selecting the most relevant roles, bullets, and skills (`/aegis-tailor`). The workflow asks upfront whether a cover letter is needed; if not, cover letter phases are skipped and only the resume PDF is built.
+3. **Generate** compiled PDF resume (and optionally cover letter) from the tailored YAMLs (`/aegis-generate`)
 
 Simpler single-pass commands (`/cover-letter`, `/tailor-resume`) are also available for quick drafts directly from the master resume.
 
@@ -60,13 +60,18 @@ Applications/               # Generated application folders (gitignored)
   YYYY.MM.DD_Company_Role/
     <slug>_JD.md
     tailored_resume.yaml
-    cover_letter.yaml
+    cover_letter.yaml       # omitted when cover letter is skipped
     <slug>-Resume.pdf
-    <slug>-Cover_Letter.pdf
+    <slug>-Cover_Letter.pdf # omitted when cover letter is skipped
 
 .claude/commands/           # Slash command definitions
 Job_Descriptions/           # Job posting inbox (gitignored)
 ```
+
+## Template Features
+
+- **`display_title`** — Roles in `tailored_resume.yaml` support an optional `display_title` field that overrides the printed job title without altering the canonical `title`. Useful when a role was internally titled differently from how it is best presented externally.
+- **Patents / Inventions** — Both `classic.typ` and `resume.typ` render a Patents/Inventions section (between experience and publications) when a `patents` array is present in the YAML data.
 
 ## Writing Style
 

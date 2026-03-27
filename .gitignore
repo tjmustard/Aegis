@@ -42,6 +42,7 @@ aegis/examples/job_descriptions/*.md
 # Root-Level Personal Job Description Files
 # ============================================================
 # Job descriptions should live in Job_Descriptions/; these are strays.
+*-jd.md
 
 # ============================================================
 # Archived / Deprecated Content

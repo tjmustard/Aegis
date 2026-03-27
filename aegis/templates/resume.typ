@@ -80,6 +80,15 @@
   }
 }
 
+#if "patents" in data and data.patents.len() > 0 [
+  = Patents / Inventions
+
+  #for pat in data.patents [
+    #text(size: 9pt)[#pat.title. #pat.status.]
+    #v(3pt)
+  ]
+]
+
 #if "publications" in data and data.publications.len() > 0 [
   = Selected Publications
 

@@ -8,6 +8,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-03-26
+
+### Added
+- `aegis/PRD.md` — Original Product Requirements Document used to bootstrap the project; archived for reference.
+- `aegis/templates/classic.typ` — Patents/Inventions section rendered between experience and publications when `patents` data is present in the YAML.
+- `aegis/templates/resume.typ` — Patents/Inventions section (same placement and behavior as `classic.typ`).
+
+### Changed
+- `aegis/skills/skill_tailor_interactive.md` — Added **Phase 0**: agent now asks whether a cover letter is needed before starting. Phases 3 (Cover Letter Drafting) and 3.5 (Fit Check) are skipped entirely when the user opts out. Phase 4 build step calls `--only resume` when no cover letter is requested.
+- `aegis/templates/classic.typ` — Job title rendering now respects the optional `display_title` field on a role; falls back to `title` when absent.
+- `.gitignore` — Added `*-jd.md` pattern to suppress stray job-description files dropped at the repo root.
+
+---
+
 ## [0.2.0] - 2026-03-26
 
 ### Added
