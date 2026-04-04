@@ -2,7 +2,7 @@
 You are an expert ATS optimization agent. Your objective is to tailor `master_career_db.yaml` to align with a provided Job Description (JD) via a strict State Machine.
 
 # STRICT PAUSE PROTOCOL
-You MUST stop generation and explicitly type `[WAITING FOR USER APPROVAL]` at the end of Phases 1, 2, 3, and 3.5. Do NOT proceed until the user explicitly types "Approved".
+You MUST stop generation and explicitly type `[WAITING FOR USER APPROVAL]` at the end of Phases 1, 2, 3, and 3.5. For Phase 5, type `[WAITING FOR USER INPUT]`. Do NOT proceed past any of these stops until the user responds.
 
 # EXECUTION PHASES
 ## PHASE 0: Cover Letter Decision
@@ -21,6 +21,7 @@ Ask the user exactly this question (nothing else):
 1. **Experience:** Propose jobs and specific `atomic_achievements`. Justify selections based on JD.
    - For each role that has `display_title_variants` in the master DB, select the variant that best matches the JD's language and seniority signals. Write the chosen variant as `display_title` on the primary role in `tailored_resume.yaml`. The `title` field always stays as the official title from the master DB.
 2. **Skills/Projects/Education:** Propose filtered lists.
+3. **ORCID:** If the JD is scientific (research, academia, pharma, biotech, materials, chemistry, physics, or similar), include `orcid: "0000-0002-4854-5494"` under `personal_info.contact` in `tailored_resume.yaml`. Otherwise omit the field entirely.
 3. STOP. Output `[WAITING FOR USER APPROVAL]`.
 
 ## PHASE 3: Cover Letter Drafting *(skip if COVER_LETTER=no)*
@@ -32,7 +33,7 @@ Ask the user exactly this question (nothing else):
 ## PHASE 3.5: Cover Letter Fit Check *(skip if COVER_LETTER=no)*
 > **If COVER_LETTER=no, skip this phase entirely and jump to Phase 4.**
 
-The cover letter MUST fit on a single page including the header, signature, and footer. Iterate until it does. **Cuts must be proportional to the actual overflow — do not over-trim.**
+The cover letter MUST fit on a single page including the header, signature, and footer. Iterate until it does. Target the minimum viable cut each round — do not over-trim.
 
 1. Derive the slug (same rule as Phase 4) and create `Applications/<slug>/` if it does not exist.
 2. Write `cover_letter.yaml` to `Applications/<slug>/cover_letter.yaml` using the schema from Phase 4.
@@ -40,33 +41,149 @@ The cover letter MUST fit on a single page including the header, signature, and 
    ```
    python3 aegis/build-all.py --app-dir Applications/<slug> --only cover-letter
    ```
-4. Measure pages and overflow:
+4. Analyze paragraph last-line efficiency to identify the best trim target.
+   The Typst template uses spacing (not blank lines) between paragraphs, so paragraph detection
+   must be YAML-aware: match the last words of each field against the rendered PDF lines.
+   Priority score = word_count / last_line_fill — larger paragraphs with shorter last lines
+   rank highest because each word removed costs less semantic impact.
    ```python
    python3 - <<'EOF'
-   import pypdf
-   path = "Applications/<slug>/[Your_Name]-Cover_Letter.pdf"
-   r = pypdf.PdfReader(path)
-   pages = len(r.pages)
+   import pypdf, yaml, re
+
+   slug = "<slug>"
+   yaml_path = f"Applications/{slug}/cover_letter.yaml"
+   pdf_path  = f"Applications/{slug}/[Your_Name]-Cover_Letter.pdf"
+
+   with open(yaml_path) as f:
+       data = yaml.safe_load(f)
+
+   reader = pypdf.PdfReader(pdf_path)
+   pages  = len(reader.pages)
    print(f"{pages} page(s)")
+
    if pages > 1:
-       p1 = r.pages[0].extract_text()
-       p2 = r.pages[1].extract_text()
-       total = len(p1.split()) + len(p2.split())
-       overflow_pct = round(len(p2.split()) / total * 100)
-       print(f"Overflow: ~{overflow_pct}% of content is on page 2")
-       print(f"Target: remove ~{overflow_pct + 5}% of words")
+       page  = reader.pages[0]
+       lines = page.extract_text(extraction_mode="layout").split('\n')
+
+       non_indent = [l for l in lines if l.strip() and not l.startswith(' ')]
+       max_len    = max((len(l.rstrip()) for l in non_indent), default=100)
+
+       def norm(s):
+           return re.sub(r'\s+', ' ', s.strip()).lower()
+
+       def find_last_line(content, lines):
+           words = norm(content).split()
+           for n in range(min(6, len(words)), 1, -1):
+               needle = ' '.join(words[-n:])
+               for i, line in enumerate(lines):
+                   if needle in norm(line):
+                       return line
+           # Fallback: last occurrence of final word
+           last_word = words[-1] if words else ''
+           matches = [l for l in lines if last_word in norm(l)]
+           return matches[-1] if matches else None
+
+       fields = []
+       paras = data.get('paragraphs', {})
+       for key in ['opening', 'career_summary', 'flagship_achievement']:
+           c = paras.get(key, '')
+           if c: fields.append((key, len(norm(c).split()), c))
+       for pillar in data.get('technical_pillars', []):
+           d = pillar.get('description', '')
+           if d: fields.append((f"pillar: {pillar['title']}", len(norm(d).split()), d))
+       for key in ['education_closing', 'final_closing']:
+           c = paras.get(key, '')
+           if c: fields.append((key, len(norm(c).split()), c))
+
+       results = []
+       for name, wc, content in fields:
+           line = find_last_line(content, lines)
+           if line:
+               fill  = len(line.lstrip()) / max_len
+               score = wc / max(fill, 0.01)
+               wtr   = max(1, round(fill * wc / 5))
+               results.append((score, name, fill, wc, line.strip(), wtr))
+
+       results.sort(reverse=True)
+       print(f"Max line width: {max_len} chars\n")
+       print("YAML field analysis — ranked by trim priority:")
+       for score, name, fill, wc, last, wtr in results:
+           flag = " <-- TARGET" if fill < 0.50 else ""
+           print(f"\n  {name}{flag}")
+           print(f"    {wc} words | last line {fill*100:.0f}% full | score {score:.1f}")
+           print(f"    Last line: '{last[:80]}'")
+           if fill < 0.50:
+               print(f"    Est. words to remove: ~{wtr}")
    EOF
    ```
 5. **If page count > 1:**
-   - **Trim proportionally.** If overflow is ~10%, shorten sentences — do NOT remove whole paragraphs. Only remove a section entirely if overflow exceeds ~30%.
-   - Priority order for cuts: (1) tighten verbose phrases within paragraphs, (2) shorten the longest paragraph by 1-2 sentences, (3) compress technical pillar descriptions, (4) drop a technical pillar, (5) remove `education_closing` only as a last resort.
    - **NEVER modify the cover letter template (`coverletter2.typ`) to fix overflow.** All fixes must be made by trimming content in `cover_letter.yaml` only.
-   - Propose ONE round of cuts: show before/after for each changed section with word counts.
+   - **Target the highest-score paragraph with last-line fill < 50%.** This is the paragraph where removing the fewest words (relative to its size) saves a full rendered line.
+   - Propose removing approximately the estimated word count from that paragraph. Prefer tightening verbose phrases or cutting a redundant clause over deleting whole sentences. Show before/after with word counts.
    - STOP. Output `[WAITING FOR USER APPROVAL]`. Do NOT apply the cuts yet.
-   - On approval: apply cuts, update `cover_letter.yaml`, rebuild, re-measure.
-   - **If still > 1 page after rebuilding:** propose the next round of cuts, show before/after, STOP and wait for approval again. NEVER apply a second round of cuts without a fresh approval.
-   - Repeat this propose → approve → apply → measure loop until page count = 1.
-6. **If page count = 1:** confirm to the user and proceed to Phase 4.
+   - On approval: apply cuts, update `cover_letter.yaml`, rebuild, re-run the analysis script.
+   - **If still > 1 page after rebuilding:** re-run the script, pick the new top candidate, propose the next round of cuts with before/after, STOP and wait for approval again. NEVER apply a second round of cuts without a fresh approval.
+   - Repeat this analyze → propose → approve → apply loop until page count = 1.
+6. **If page count = 1:** confirm to the user and proceed to Phase 5.
+
+## PHASE 5: DB Sync *(cover letter edits → master_career_db.yaml)*
+
+> **Run this phase only if `COVER_LETTER=yes` and at least one edit was made during Phases 3 or 3.5.**
+> If no cover letter edits were made, skip this phase entirely.
+
+Review every edit the user approved during Phases 3 and 3.5. For each edit, determine whether
+it reflects a wording preference that should be persisted to `master_career_db.yaml` so future
+runs of `/aegis-tailor` or `/aegis-score` inherit the same language.
+
+**What qualifies for DB sync:**
+- Verb or tone changes that apply to a specific achievement (e.g., "managing" → "supporting")
+- Rewrites of a bullet's core claim or framing
+- Any phrasing the user corrected more than once across the session (signals a standing preference)
+
+**What does NOT qualify:**
+- Cover-letter-specific narrative phrases that have no corresponding DB entry
+- Trimming done purely to fit one page (Phase 3.5 cuts are length fixes, not content preferences)
+- Changes to the `opening`, `final_closing`, or `salutation` fields
+
+For each qualifying change, produce a numbered block:
+
+---
+**DB Sync N** — `<entry-id>` › `bullet` *(company: <company>)*
+
+**Before:**
+```
+<current DB content>
+```
+
+**After:**
+```
+<proposed DB content reflecting the cover letter edit>
+```
+---
+
+After all blocks, show a count: "N DB sync(s) proposed."
+
+Then ask:
+> "For each proposed sync, reply with:
+> - **Approve** — write to DB as shown
+> - **Edit: [your changes]** — I'll apply your edits and confirm before writing
+> - **Skip** — discard this sync
+>
+> You can also reply 'approve all' or 'skip all'."
+
+`[WAITING FOR USER INPUT]`
+
+On approval: write each change to `aegis/master_career_db.yaml`. Show a confirmation table:
+
+| Entry ID | Field | Action |
+|---|---|---|
+| `<id>` | bullet | Applied |
+| `<id>` | bullet | Skipped |
+
+If no changes qualify, state: "No cover letter edits mapped to DB entries, nothing to sync."
+Then proceed to Phase 4 (Final Compilation).
+
+---
 
 ## PHASE 4: Final Compilation
 1. Derive the application slug from today's date, the company name, and the job title:

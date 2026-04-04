@@ -28,6 +28,14 @@ Cover_Letters/
 Tailored_Resumes/
 
 # ============================================================
+# Supporting Information (personal documents — gitignored)
+# ============================================================
+# Content is personal; README.md is tracked as a usage guide.
+Supporting_Information/LinkedIn_Articles/
+Supporting_Information/WhitePapers/
+Supporting_Information/Abstracts/
+
+# ============================================================
 # Personal Example Files
 # ============================================================
 # Real cover letters and resumes are ignored via *.pdf / *.docx above.

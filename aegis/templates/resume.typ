@@ -11,6 +11,14 @@
 // Extract LinkedIn handle from full URL
 #let linkedin_handle = data.personal_info.contact.linkedin.split("/").filter(x => x != "").last()
 
+// Build custom contact items
+#let custom_items = ((text: data.personal_info.contact.location, icon: "location-dot"),)
+
+// Extract ORCID ID from full URL if present
+#let orcid_id = if "orcid" in data.personal_info.contact and data.personal_info.contact.orcid != "" {
+  data.personal_info.contact.orcid.split("/").filter(x => x != "").last()
+} else { none }
+
 #show: resume.with(
   author: (
     firstname: firstname,
@@ -18,13 +26,9 @@
     email: data.personal_info.contact.email,
     phone: data.personal_info.contact.phone,
     linkedin: linkedin_handle,
+    orcid: orcid_id,
     positions: (data.professional_experience.first().roles.first().title,),
-    custom: (
-      (
-        text: data.personal_info.contact.location,
-        icon: "location-dot",
-      ),
-    ),
+    custom: custom_items,
   ),
   profile-picture: none,
   date: datetime.today().display(),

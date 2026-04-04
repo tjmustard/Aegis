@@ -12,6 +12,10 @@
   #v(2pt)
   #data.personal_info.contact.email | #data.personal_info.contact.phone | #data.personal_info.contact.location\
   #link(data.personal_info.contact.linkedin)[LinkedIn]
+  #if "orcid" in data.personal_info.contact and data.personal_info.contact.orcid != "" {
+    [ | ]
+    link("https://orcid.org/" + data.personal_info.contact.orcid)[ORCID: #data.personal_info.contact.orcid]
+  }
 ]
 
 #v(8pt)

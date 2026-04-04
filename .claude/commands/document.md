@@ -1,4 +1,9 @@
 ---
-description: "Update project docs to reflect recent code changes"
+description: "Update README.md and CHANGELOG.md to reflect recent changes, remove PII, and report when ready to commit"
 ---
-Read `.agents/skills/document/SKILL.md` and follow its instructions precisely to update project documentation after recent code changes.
+Read `aegis/skills/skill_document.md` and follow its instructions precisely.
+
+Scan git diff and status to identify all changes not yet documented. Update CHANGELOG.md and
+README.md as needed, scrub both files for PII, and report when docs are ready to commit.
+
+Do NOT commit or push to GitHub.
