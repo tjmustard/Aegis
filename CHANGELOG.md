@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-04-21
+
+### Added
+- `Project_Aegis_White_Paper.md` — Comprehensive white paper documenting the first-principles architecture behind Aegis: the problem of LLM hallucination in resume tailoring, the solution via structured YAML database + state machine protocol + Typst compilation, and the epistemic constraints and vulnerabilities of the system.
+
 ## [0.4.0] - 2026-04-01
 
 ### Added

@@ -51,6 +51,8 @@ Simpler single-pass commands (`/cover-letter`, `/tailor-resume`) are also availa
 ## Directory Structure
 
 ```
+Project_Aegis_White_Paper.md # Architectural white paper: first-principles design rationale
+
 aegis/
   master_resume.md          # Your master resume (gitignored)
   master_career_db.yaml     # Structured career database (gitignored)
