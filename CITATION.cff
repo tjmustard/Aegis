@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: >-
+  If you use Aegis in your research or reference it in a paper,
+  please cite it using the metadata below.
+type: software
+title: "Aegis"
+abstract: >-
+  A Claude Code-based toolkit for tailoring resumes and cover letters to job descriptions,
+  with Typst PDF generation and a structured career database.
+authors:
+  - given-names: Thomas
+    family-names: Mustard
+    alias: tjmustard
+repository-code: "https://github.com/tjmustard/Aegis"
+license: MIT
+version: "0.4.1"
+date-released: "2026-04-21"
+keywords:
+  - Aegis
+  - resume
+  - cover letter
+  - career database
+  - Claude Code
+  - Typst

@@ -1,8 +1,63 @@
-# Aegis
+<div align="center">
+    <img src="./media/Aegis_logo.webp" alt="Aegis Logo" width="200" height="200"/>
+    <h1>Aegis</h1>
+    <h3><em>A Claude Code toolkit that turns your career database into precisely tailored resumes and cover letters.</em></h3>
+</div>
+
+<p align="center">
+    <strong>Aegis solves the copy-paste application problem by maintaining a structured YAML career database — then using an interactive AI workflow to select, tailor, and compile role-specific PDFs in one pass. Every generated word traces back to a source of truth you control.</strong>
+</p>
+
+<p align="center">
+    <a href="https://github.com/tjmustard/Aegis/releases/latest"><img src="https://img.shields.io/badge/release-v0.4.1-blue" alt="Latest Release"/></a>
+    <a href="https://github.com/tjmustard/Aegis/stargazers"><img src="https://img.shields.io/github/stars/tjmustard/Aegis?style=social" alt="GitHub stars"/></a>
+    <a href="https://github.com/tjmustard/Aegis/blob/main/LICENSE"><img src="https://img.shields.io/github/license/tjmustard/Aegis" alt="License"/></a>
+</p>
+
+---
+
+## Table of Contents
+
+- [🤔 What is Aegis?](#-what-is-aegis)
+- [⚡ Get Started](#-get-started)
+- [🔄 How It Works](#-how-it-works)
+- [🤖 Slash Commands](#-slash-commands)
+- [📂 Directory Structure](#-directory-structure)
+- [📁 Supporting Information](#-supporting-information)
+- [📋 Examples](#-examples)
+- [✨ Template Features](#-template-features)
+- [✍️ Writing Style](#️-writing-style)
+- [📄 License](#-license)
+
+## 🤔 What is Aegis?
 
 A Claude Code-based toolkit for tailoring resumes and cover letters to job descriptions, with Typst PDF generation and a structured career database.
 
-## How It Works
+The canonical source of truth is `aegis/master_career_db.yaml` — a structured YAML that encodes your full career history as atomic, reusable achievements. The interactive `/aegis-tailor` workflow reads from this DB to select and compose the most relevant content for each application, then compiles PDFs without ever touching your master resume manually.
+
+## ⚡ Get Started
+
+### Prerequisites
+
+- [Claude Code](https://claude.ai/code)
+- [uv](https://docs.astral.sh/uv/) (recommended) or Python 3.11+ — build scripts declare their own dependencies via PEP 723, so `uv run` handles installs automatically
+- [Typst](https://typst.app/) (for PDF compilation)
+- The following fonts, required by the `modern-cv` Typst template:
+  - [Roboto](https://fonts.google.com/specimen/Roboto)
+  - [Source Sans Pro](https://fonts.google.com/specimen/Source+Sans+3)
+  - [Font Awesome](https://fontawesome.com/download) (OTF files)
+
+  Install fonts system-wide or place OTF/TTF files in `~/.local/share/fonts/` (Linux) or `~/Library/Fonts/` (macOS), then run `fc-cache -f` (Linux) or reopen Font Book (macOS).
+
+### Setup
+
+1. Clone this repo.
+2. Install the fonts listed above.
+3. Add your master resume as `aegis/master_resume.md`.
+4. Run `/aegis-ingest` to populate `aegis/master_career_db.yaml`.
+5. Drop a job description into `Job_Descriptions/` and run `/aegis-tailor <path>`.
+
+## 🔄 How It Works
 
 Aegis uses Claude Code slash commands to drive an AI-assisted application workflow:
 
@@ -15,27 +70,7 @@ To update or refine entries in the career DB at any time, use `/aegis-db-edit` �
 
 Simpler single-pass commands (`/cover-letter`, `/tailor-resume`) are also available for quick drafts directly from the master resume.
 
-## Prerequisites
-
-- [Claude Code](https://claude.ai/code)
-- [uv](https://docs.astral.sh/uv/) (recommended) or Python 3.11+ — build scripts declare their own dependencies via PEP 723, so `uv run` handles installs automatically
-- [Typst](https://typst.app/) (for PDF compilation)
-- The following fonts, required by the `modern-cv` Typst template:
-  - [Roboto](https://fonts.google.com/specimen/Roboto)
-  - [Source Sans Pro](https://fonts.google.com/specimen/Source+Sans+3)
-  - [Font Awesome](https://fontawesome.com/download) (OTF files)
-
-  Install fonts system-wide or place OTF/TTF files in `~/.local/share/fonts/` (Linux) or `~/Library/Fonts/` (macOS), then run `fc-cache -f` (Linux) or reopen Font Book (macOS).
-
-## Setup
-
-1. Clone this repo.
-2. Install the fonts listed above.
-3. Add your master resume as `aegis/master_resume.md`.
-4. Run `/aegis-ingest` to populate `aegis/master_career_db.yaml`.
-5. Drop a job description into `Job_Descriptions/` and run `/aegis-tailor <path>`.
-
-## Slash Commands
+## 🤖 Slash Commands
 
 | Command | Description |
 |---|---|
@@ -48,7 +83,7 @@ Simpler single-pass commands (`/cover-letter`, `/tailor-resume`) are also availa
 | `/cover-letter <jd-path>` | Quick cover letter draft from the master resume |
 | `/tailor-resume <jd-path>` | Quick tailored resume draft from the master resume |
 
-## Directory Structure
+## 📂 Directory Structure
 
 ```
 Project_Aegis_White_Paper.md # Architectural white paper: first-principles design rationale
@@ -80,7 +115,7 @@ Supporting_Information/     # Personal reference documents (gitignored, see belo
 Job_Descriptions/           # Job posting inbox (gitignored)
 ```
 
-## Supporting Information
+## 📁 Supporting Information
 
 `Supporting_Information/` holds personal reference documents that Claude reads when
 generating content. The subfolders are gitignored — files stay local. A `README.md`
@@ -101,7 +136,7 @@ You can reference this material explicitly in any skill:
 /aegis-db-edit derive new achievements from Supporting_Information/WhitePapers/product-name-application-note.pdf
 ```
 
-## Examples
+## 📋 Examples
 
 `aegis/examples/` holds reference files used by the Aegis skills. These are gitignored
 except for clearly labeled template files.
@@ -120,11 +155,15 @@ To replicate a resume design as a new Typst template:
 # Output written to aegis/templates/
 ```
 
-## Template Features
+## ✨ Template Features
 
 - **`display_title`** — Roles in `tailored_resume.yaml` support an optional `display_title` field that overrides the printed job title without altering the canonical `title`. Useful when a role was internally titled differently from how it is best presented externally.
 - **Patents / Inventions** — Both `classic.typ` and `resume.typ` render a Patents/Inventions section (between experience and publications) when a `patents` array is present in the YAML data.
 
-## Writing Style
+## ✍️ Writing Style
 
 All generated content follows `aegis/writing_style.md`. Claude reads this file automatically before producing any written output.
+
+## 📄 License
+
+This project is licensed under the terms of the MIT open source license. Please refer to the [LICENSE](./LICENSE) file for the full terms.

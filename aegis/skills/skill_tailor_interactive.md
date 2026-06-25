@@ -20,6 +20,7 @@ Ask the user exactly this question (nothing else):
 ## PHASE 2: Section-by-Section Node Selection
 1. **Experience:** Propose jobs and specific `atomic_achievements`. Justify selections based on JD.
    - For each role that has `display_title_variants` in the master DB, select the variant that best matches the JD's language and seniority signals. Write the chosen variant as `display_title` on the primary role in `tailored_resume.yaml`. The `title` field always stays as the official title from the master DB.
+   - If a role also has a `display_title` field set directly in the master DB (alongside `display_title_variants`), treat it as the standing preferred default. Use it unless a different variant is an unambiguously better fit for the specific JD.
 2. **Skills/Projects/Education:** Propose filtered lists.
 3. **ORCID:** If the JD is scientific (research, academia, pharma, biotech, materials, chemistry, physics, or similar), include `orcid: "0000-0002-4854-5494"` under `personal_info.contact` in `tailored_resume.yaml`. Otherwise omit the field entirely.
 3. STOP. Output `[WAITING FOR USER APPROVAL]`.
