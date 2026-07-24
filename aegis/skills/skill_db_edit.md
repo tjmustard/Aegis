@@ -103,7 +103,12 @@ Then note:
   in scope unless the user explicitly asks otherwise.
 - **No em-dashes.** Follow `aegis/writing_style.md` for all generated content.
 - **Active voice, no hedging language.** Match the voice and style of existing DB entries.
-- **Preserve YAML structure.** Use block scalars (`>`) for long bullets; quote strings that
-  contain colons.
+- **Preserve YAML structure.** Use block scalars (`>`) for long bullets and for the `detail`
+  field; quote strings that contain colons.
+- **`detail` is an editable field.** Each `atomic_achievement` may carry an optional `detail`
+  block scalar holding supporting specifics (named artifacts, sub-projects, extended metrics,
+  real internal figures) that never render on a resume. Treat it like any other field: a change
+  to `detail` is its own numbered before/after block. Keep the `bullet` concise; sensitive
+  internal figures (exact prices/thresholds) belong in `detail`, genericized in the `bullet`.
 - **One change = one field on one entry.** If a user instruction touches multiple entries or
   fields, split into separate numbered blocks, one per field per entry.

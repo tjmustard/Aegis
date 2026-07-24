@@ -21,6 +21,8 @@ Ask the user exactly this question (nothing else):
 1. **Experience:** Propose jobs and specific `atomic_achievements`. Justify selections based on JD.
    - For each role that has `display_title_variants` in the master DB, select the variant that best matches the JD's language and seniority signals. Write the chosen variant as `display_title` on the primary role in `tailored_resume.yaml`. The `title` field always stays as the official title from the master DB.
    - If a role also has a `display_title` field set directly in the master DB (alongside `display_title_variants`), treat it as the standing preferred default. Use it unless a different variant is an unambiguously better fit for the specific JD.
+   - **Using the `detail` field:** an achievement's optional `detail` field holds supporting specifics (named artifacts, sub-projects, extended metrics, real internal figures) that are NOT in the resume-ready `bullet`. When a JD calls for depth on that achievement, you MAY draw on `detail` to specialize or lightly expand the emitted bullet. Never copy `detail` verbatim into `tailored_resume.yaml`; the emitted bullet stays concise. Only `bullet` is rendered on the PDF.
+   - **Emit-time genericization (sensitive figures):** when writing `bullet` text into `tailored_resume.yaml`, replace exact internal prices and usage thresholds with generic phrasing (e.g. "standard per-unit usage rate", not "$1.00/RU"; "heavy-usage threshold", not "1,000 RUs/month"). Margin-target percentages (e.g. "90%+ gross margin") may remain. This applies even when the source figure came from a `detail` field.
 2. **Skills/Projects/Education:** Propose filtered lists.
 3. **ORCID:** If the JD is scientific (research, academia, pharma, biotech, materials, chemistry, physics, or similar), include `orcid: "0000-0002-4854-5494"` under `personal_info.contact` in `tailored_resume.yaml`. Otherwise omit the field entirely.
 3. STOP. Output `[WAITING FOR USER APPROVAL]`.
@@ -29,6 +31,7 @@ Ask the user exactly this question (nothing else):
 > **If COVER_LETTER=no, skip this phase entirely and jump to Phase 4.**
 
 1. Draft the cover letter content anchored around 1-2 selected achievements. Show the full text inline for review.
+   - **Emit-time genericization:** as in Phase 2, replace exact internal prices and usage thresholds with generic phrasing in the cover letter body (retain margin-target %). Never surface a sensitive figure pulled from an achievement's `detail` field.
 2. STOP. Output `[WAITING FOR USER APPROVAL]`.
 
 ## PHASE 3.5: Cover Letter Fit Check *(skip if COVER_LETTER=no)*

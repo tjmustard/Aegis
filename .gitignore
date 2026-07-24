@@ -3,7 +3,8 @@
 # ============================================================
 
 # Career database and master resume (personal content — populate with your own)
-aegis/master_career_db.yaml
+# Wildcard also covers dated backups, e.g. master_career_db.backup-YYYY.MM.DD.yaml
+aegis/master_career_db*.yaml
 aegis/master_resume.md
 
 # Resume and document files
@@ -34,6 +35,7 @@ Tailored_Resumes/
 Supporting_Information/LinkedIn_Articles/
 Supporting_Information/WhitePapers/
 Supporting_Information/Abstracts/
+Supporting_Information/Other/
 
 # ============================================================
 # Personal Example Files

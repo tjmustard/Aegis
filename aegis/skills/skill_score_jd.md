@@ -13,6 +13,11 @@ Do NOT proceed until the user responds.
 
 Read both the JD file and `aegis/master_career_db.yaml` in full before generating any output.
 
+When assessing coverage, match JD requirements and keywords against each achievement's `bullet`,
+`skills_applied`, `tags`, AND its optional `detail` field. The `detail` field holds supporting
+specifics (named artifacts, sub-projects, extended metrics) not present in the concise bullet, so
+it is a valid source of evidence for a match even though it is never rendered on a resume.
+
 ### 1a. Overall Match Score
 Produce a **strict** integer score out of 100 based on:
 - **Technical Skills Match (30 pts):** How well `skills_taxonomy` entries cover JD requirements
@@ -68,7 +73,11 @@ exact schema and style of existing entries in `master_career_db.yaml`:
 ```yaml
 - id: <company-slug>-<descriptive-id>       # e.g. sandboxaq-stakeholder-alignment
   bullet: >
-    [Achievement sentence. Active voice. Specific. Quantified where possible. No em-dashes.]
+    [ONE concise, resume-ready achievement statement. Active voice. Specific. Quantified where
+    possible. Generic phrasing for sensitive internal figures. No em-dashes.]
+  detail: >                                   # (optional) omit if there is nothing extra to hold
+    [Supporting specifics: named artifacts, sub-projects, extended metrics, real internal figures.
+    Never emitted verbatim to a resume; tailoring pulls from it when a JD calls for depth.]
   skills_applied: [list of skills from skills_taxonomy or new skills if warranted]
   impact_metrics: ["metric string"]          # [] if none
   tags: [thematic tags]
@@ -76,6 +85,7 @@ exact schema and style of existing entries in `master_career_db.yaml`:
 
 **Rules for drafting:**
 - Write in the same voice and style as existing bullets in the DB
+- Keep the `bullet` tight (one to two sentences); push overflow specifics into `detail`
 - No em-dashes. No hedging language ("helped", "assisted"). Active verbs only.
 - Anchor to real, inferrable experience from the existing DB context — do not fabricate metrics
 - If a metric is unknown, leave `impact_metrics: []` and note in a comment that the user should fill it in

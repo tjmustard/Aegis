@@ -24,6 +24,7 @@ Generate a tailored cover letter for a job application. The job description file
 
 - **Tone:** Professional, mission-driven, and authoritative.
 - **Style:** Use high-impact phrasing from the source material. Avoid generic AI phrasing and em-dashes (—).
+- **Sensitive figures:** Never surface exact internal prices or usage thresholds in the letter. Use generic phrasing (e.g. "standard per-unit usage rate", not "$1.00/RU"); margin-target percentages may stay.
 - **Length:** Approximately 400–500 words. Must fit on one page.
 - **No candidate contact header.** Start directly with the salutation.
 - **Educational framing:** Frame the Ph.D. as the "deep technical foundation" enabling cross-functional leadership, regardless of how closely the degree matches the role.
