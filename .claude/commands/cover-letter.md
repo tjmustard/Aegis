@@ -23,7 +23,8 @@ Generate a tailored cover letter for a job application. The job description file
 ## Writing Rules
 
 - **Tone:** Professional, mission-driven, and authoritative.
-- **Style:** Use high-impact phrasing from the source material. Avoid generic AI phrasing and em-dashes (—).
+- **Style:** Use high-impact phrasing from the source material.
+- **De-slop gate.** Before emitting the letter, apply the de-slop pass in `aegis/writing_style.md` (which incorporates `aegis/skills/stop-slop/`). Run its Quick Checks as a gate; do not output prose that fails them. Where a de-slop rule conflicts with cover-letter format conventions (first-person candidate voice, the 2-3 technical-pillars pattern), the format convention wins.
 - **Sensitive figures:** Never surface exact internal prices or usage thresholds in the letter. Use generic phrasing (e.g. "standard per-unit usage rate", not "$1.00/RU"); margin-target percentages may stay.
 - **Length:** Approximately 400–500 words. Must fit on one page.
 - **No candidate contact header.** Start directly with the salutation.

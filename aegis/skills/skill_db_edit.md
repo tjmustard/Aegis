@@ -101,7 +101,7 @@ Then note:
 - **Never write to the DB before Phase 3.** Proposing a change is not applying it.
 - **Never modify `tailored_resume.yaml` files automatically.** Only `master_career_db.yaml` is
   in scope unless the user explicitly asks otherwise.
-- **No em-dashes.** Follow `aegis/writing_style.md` for all generated content.
+- **De-slop gate.** Follow `aegis/writing_style.md` (which incorporates `aegis/skills/stop-slop/`) for all generated field content. Run its Quick Checks over any bullet or summary text you propose; do not output prose that fails them. No em-dashes. Where a de-slop rule conflicts with the parallel verb-led bullet convention, the format convention wins.
 - **Active voice, no hedging language.** Match the voice and style of existing DB entries.
 - **Preserve YAML structure.** Use block scalars (`>`) for long bullets and for the `detail`
   field; quote strings that contain colons.

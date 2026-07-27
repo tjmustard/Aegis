@@ -87,7 +87,8 @@ exact schema and style of existing entries in `master_career_db.yaml`:
 - Write in the same voice and style as existing bullets in the DB
 - Keep the `bullet` tight (one to two sentences); push overflow specifics into `detail`
 - No em-dashes. No hedging language ("helped", "assisted"). Active verbs only.
-- Anchor to real, inferrable experience from the existing DB context — do not fabricate metrics
+- **De-slop gate:** run the `aegis/writing_style.md` Quick Checks over each drafted bullet (which incorporates `aegis/skills/stop-slop/`), subordinate to the parallel verb-led bullet convention. Do not add words that the DB context does not support.
+- Anchor to real, inferrable experience from the existing DB context. Do not fabricate metrics
 - If a metric is unknown, leave `impact_metrics: []` and note in a comment that the user should fill it in
 - Propose which company's `atomic_achievements` list the entry should be appended to
 

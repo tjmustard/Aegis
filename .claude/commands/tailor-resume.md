@@ -19,7 +19,7 @@ Generate a tailored resume optimized for a specific job application. The job des
 4. **Tailor the resume** by applying these rules:
 
 ### Professional Summary
-Rewrite the summary (3 short paragraphs, ~75 words each) to lead with the candidate's identity as it maps to *this specific role*. Mirror the JD's language and priorities. Keep the authentic voice — avoid generic buzzwords not already in the source material.
+Rewrite the summary (3 short paragraphs, ~75 words each) to lead with the candidate's identity as it maps to *this specific role*. Mirror the JD's language and priorities. Keep the authentic voice, avoiding generic buzzwords not already in the source material. Run the `aegis/writing_style.md` Quick Checks over the rewritten summary before emitting it.
 
 ### Skills
 Reorder skill groups and individual skills so the most relevant to this JD appear first. Remove skills with no relevance to this role. Do not invent skills not present in the master resume.
@@ -43,6 +43,7 @@ Keep education as-is. For publications, retain the full list but move the most d
 - Bold skill category names (e.g., `**Agentic AI & Ecosystems:**`).
 - Do not add sections not present in the master resume.
 - Do not include a "tailored for [Company]" note or any meta-commentary in the file itself.
+- **De-slop gate.** Before emitting the resume, apply the de-slop pass in `aegis/writing_style.md` (which incorporates `aegis/skills/stop-slop/`). Run its Quick Checks as a gate; do not output prose that fails them. Where a de-slop rule conflicts with resume format conventions (parallel verb-led bullets, first-person candidate voice), the format convention wins.
 
 ## Output
 

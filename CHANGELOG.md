@@ -6,7 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
-## [Unreleased]
+## [0.4.2] - 2026-07-26
+
+### Added
+- `aegis/skills/stop-slop/`: Vendored the MIT-licensed stop-slop skill (SKILL.md, references, README, CHANGELOG, LICENSE; authored by Hardik Pandya) so the de-slop ruleset travels with the repo instead of depending on a global user skill.
+
+### Changed
+- `aegis/writing_style.md`: Expanded from the thin punctuation/tone note into the writing hub. Added a De-slop section that points at the vendored `stop-slop` skill, inlines a condensed Quick-Check gate (adverbs, passive voice, false agency, Wh- openers, throat-clearing, binary contrasts, em-dashes, vague declaratives), and states a reconciliation clause: where a de-slop rule conflicts with resume/cover-letter format conventions (parallel verb-led bullets, first-person candidate voice, the 2-3 technical-pillars pattern), the format convention wins.
+- Wired a de-slop gate into every prose-generating skill: `aegis/skills/skill_tailor_interactive.md`, `.claude/commands/cover-letter.md`, `.claude/commands/tailor-resume.md`, `aegis/skills/skill_score_jd.md`, `aegis/skills/skill_db_edit.md`, and `aegis/skills/skill_ingest_master.md`. The `/aegis-ingest` gate is subtractive only and subordinate to its Zero Hallucination rule. `/aegis-render` and `/aegis-generate` are untouched (they emit no prose).
+- `README.md`: Added `stop-slop/` to the directory structure and expanded the Writing Style section to describe the de-slop gate and credit the MIT/author attribution.
+- Bumped release version to `0.4.2` across the README release badge, `CITATION.cff` (`date-released` 2026-07-26), and the `media/DETERMINISTIC_DOC_ORCHESTRATOR.md` references.
 
 ## [0.4.1] - 2026-04-21
 

@@ -13,8 +13,8 @@ authors:
     alias: tjmustard
 repository-code: "https://github.com/tjmustard/Aegis"
 license: MIT
-version: "0.4.1"
-date-released: "2026-04-21"
+version: "0.4.2"
+date-released: "2026-07-26"
 keywords:
   - Aegis
   - resume

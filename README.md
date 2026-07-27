@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/tjmustard/Aegis/releases/latest"><img src="https://img.shields.io/badge/release-v0.4.1-blue" alt="Latest Release"/></a>
+    <a href="https://github.com/tjmustard/Aegis/releases/latest"><img src="https://img.shields.io/badge/release-v0.4.2-blue" alt="Latest Release"/></a>
     <a href="https://github.com/tjmustard/Aegis/stargazers"><img src="https://img.shields.io/github/stars/tjmustard/Aegis?style=social" alt="GitHub stars"/></a>
     <a href="https://github.com/tjmustard/Aegis/blob/main/LICENSE"><img src="https://img.shields.io/github/license/tjmustard/Aegis" alt="License"/></a>
 </p>
@@ -93,6 +93,7 @@ aegis/
   master_career_db.yaml     # Structured career database (gitignored)
   writing_style.md          # Writing conventions for all generated content
   skills/                   # Skill prompt files
+    stop-slop/              # Vendored de-slop ruleset (MIT, Hardik Pandya)
   templates/                # Typst templates for PDF generation
   examples/                 # Reference examples (see below)
   build.py                  # Build a single PDF
@@ -163,6 +164,8 @@ To replicate a resume design as a new Typst template:
 ## ✍️ Writing Style
 
 All generated content follows `aegis/writing_style.md`. Claude reads this file automatically before producing any written output.
+
+The style hub incorporates a **de-slop** ruleset that strips AI writing tells (throat-clearing openers, adverbs, binary contrasts, false agency, em-dashes, vague declaratives) from generated prose. Every prose-generating skill (`/aegis-tailor`, `/cover-letter`, `/tailor-resume`, `/aegis-score`, `/aegis-db-edit`, `/aegis-ingest`) runs this de-slop gate before emitting content, subordinate to resume and cover-letter format conventions. The ruleset is the vendored [stop-slop](aegis/skills/stop-slop/) skill (MIT, authored by Hardik Pandya).
 
 ## 📄 License
 
